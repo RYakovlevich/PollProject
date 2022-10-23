@@ -1,8 +1,6 @@
 from django.contrib import admin
 from django.utils.html import mark_safe
-import datetime
-from django.utils import timezone
-from .models import Choice, Question
+from .models import Choice, Question, Test
 
 
 class ChoiceInline(admin.StackedInline):
@@ -10,17 +8,31 @@ class ChoiceInline(admin.StackedInline):
     extra = 3
 
 
+class QuestionInline(admin.StackedInline):
+    model = Question
+    extra = 2
+
+
+@admin.register(Test)
+class TestAdmin(admin.ModelAdmin):
+    list_display = ('testtype', 'level', 'pub_date', 'maxballs')
+    fieldsets = [
+        (None,               {'fields': ['testtype']}),
+        ('Дата публикации', {'fields': ['pub_date'], 'classes': ['collapse']}),
+        ('Максимальное кол-во баллов', {'fields': ['maxballs']})
+    ]
+    inlines = [QuestionInline]
+
+
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('question_text', 'pub_date', 'link')
+    list_display = ('question_text', 'link', 'testnumb')
     fieldsets = [
         (None,               {'fields': ['question_text']}),
-        ('Дата публикации', {'fields': ['pub_date'], 'classes': ['collapse']}),
+        ('К какому тесту относится', {'fields': ['testnumb']})
     ]
     inlines = [ChoiceInline]
 
     @admin.display(description='Ссылка на вопрос')
     def link(self, question: Question):
         return mark_safe(f'''<a href="/polls/{question.pk}" target="_blank">Открыть</a>''')
-
-

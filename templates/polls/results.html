@@ -6,6 +6,9 @@
 {% for choice in question.choice_set.all %}
     <li>{{ choice.choice_text }} -- {{ choice.votes }} голосов</li>
 {% endfor %}
+{% for resulttest in question.choice_set.all %}
+    <li>{{ resulttest.user }} -- {{ resulttest.balls }} балл</li>
+{% endfor %}
 </ul>
 <a href="{% url 'polls:detail' question.id %}">Переспросить ? </a>
 <br>
