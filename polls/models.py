@@ -31,6 +31,12 @@ class Choice(models.Model):
         return self.choice_text
 
 
+class ResultTest(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    balls = models.IntegerField(default=0)
+
+
 # class Profile(models.Model):
 #     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
 #     bio = models.TextField(null=True, blank=True)
@@ -39,9 +45,3 @@ class Choice(models.Model):
 #
 #     def __str__(self):
 #         return str(self.user)
-
-
-class ResultTest(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    balls = models.IntegerField(default=0)

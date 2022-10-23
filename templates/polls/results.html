@@ -1,15 +1,15 @@
-<h1>{{ question.question_text }}</h1>
+<h1>{{ test.question_text }}</h1>
 
 <ul>
 
 
-{% for choice in question.choice_set.all %}
+{% for choice in test.choice_set.all %}
     <li>{{ choice.choice_text }} -- {{ choice.votes }} голосов</li>
 {% endfor %}
-{% for resulttest in question.choice_set.all %}
+{% for resulttest in test.choice_set.all %}
     <li>{{ resulttest.user }} -- {{ resulttest.balls }} балл</li>
 {% endfor %}
 </ul>
-<a href="{% url 'polls:detail' question.id %}">Переспросить ? </a>
+{#<a href="{% url 'polls:detail' test.id %}">Переспросить ? </a>#}
 <br>
-<a href="{% url 'polls:detail' question.id|add:'1' %}">Следующий вопрос</a>
+{#<a href="{% url 'polls:detail' test.id|add:'-1' %}">Следующий вопрос</a>#}
