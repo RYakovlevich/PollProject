@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        {% load static %}
         <meta charset="UTF-8">
         <title>Title</title>
-        <link rel="stylesheet" href="{% static 'polls/style.css' %}">
+        <link rel="stylesheet" href="../../static/polls/style.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
@@ -14,30 +13,27 @@
         <div class="bg-success bg-gradient px-5 header">
             <div class="d-flex justify-content-between pt-3 px-5">
                 <div>
-                    <a class="logo-link" href="{% url 'home' %}">
-                        <i class="fab fa-yoast text-white fa-3x"></i>
-                        <span class="text-white fs-2 fst-italic ms-1">Y-Poll</span>
-                    </a>
+                    <i class="fab fa-yoast text-white fa-3x"></i>
+                    <span class="text-white fs-2 fst-italic ms-1">Y-Poll</span>
                 </div>
                 <div class="d-flex">
                     <div>
-                        {% if user.is_authenticated %}
-{#                            <a href="/" class="btn btn-success">#}
-{#                                <i class="far fa-user text-white"></i>Profile#}
-{#                            </a>#}
-{#                            #}
-                            <a href="{% url 'logout' %}" class="btn btn-warning text-white ms-2">Log Out</a>
-                        {% else %}
-                            <a href="{% url 'sign-up' %}" class="btn btn-warning text-white">Sign In</a>
-                            <a href="{% url 'login' %}" class="btn btn-warning text-white">Log In</a>
-                        {% endif %}
+                        <button class="btn btn-warning text-white">Sign In</button>
+                        <button class="btn btn-warning text-white">Log In</button>
+                    </div>
+                    <div>
+                        <a>
+                            <i class="far fa-user text-white"></i>
+                            <span class="text-white">Profile</span>
+                        </a>
+                        <button class="btn btn-warning text-white ms-2">Sign Out</button>
                     </div>
                 </div>
             </div>
             <nav class="navbar navbar-expand-lg navbar-dark px-4">
                 <div class="container-fluid">
                     <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-                        <a class="nav-link text-white fw-bold" href="{% url 'home' %}" role="button">
+                        <a class="nav-link text-white fw-bold" href="#" role="button">
                             Home
                         </a>
                         <ul class="navbar-nav">
@@ -55,44 +51,9 @@
               </div>
             </nav>
         </div>
-        <div class="bg-body p-5 body">
-            {% block content %}
-                {% if user.is_authenticated %}
-                    {% if latest_question_list %}
-                        <ul>
-                            {% for test in latest_question_list %}
-                                <li><a href="{% url 'polls:detail' test.id %}">{{ test.testtype }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p>No polls are available.</p>
-                    {% endif %}
-                {% else %}
-                    <div class="mx-5">
-                        <div class="fs-1 fst-italic fw-bold">
-                            Welcome to Y-Poll
-                        </div>
-                        <div class="fs-3 fst-italic pt-3">
-                            Create forms, surveys and analyze their results.
-                        </div>
-                        <div class="fs-3 fst-italic pb-4">
-                            Response statistics are updated in real time.
-                        </div>
-                        <div>
-                            <a href="{% url 'sign-up' %}" class="btn btn-success text-white">Sign In</a>
-                            <a href="{% url 'login' %}" class="btn btn-success text-white">Log In</a>
-                        </div>
-                    </div>
-                {% endif %}
-            {% endblock %}
-        </div>
+        <div class="bg-body p-5 body">info</div>
         <div class="d-flex justify-content-center align-items-center py-3 bg-success bg-gradient footer">
             <div class="text-white fst-italic">Copyright © 2022, LLC. All rights reserved.</div>
         </div>
-
     </body>
 </html>
-
-
-
-

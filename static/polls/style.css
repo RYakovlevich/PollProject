@@ -1,6 +1,17 @@
-li a {
-    color: green;
+.header {
+    height: 17vh;
+    min-height: 125px;
 }
-body {
-    background: white url("images/background.jpg") no-repeat;
+
+.logo-link {
+    text-decoration: none;
+}
+
+.body {
+    min-height: 78vh;
+    height: max-content;
+}
+
+.footer {
+    height: 5vh;
 }

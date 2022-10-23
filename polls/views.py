@@ -20,17 +20,18 @@ class HomeView(ListView):
 
 def open_test(request, test_id):
         try:
-            test_ = Question.objects.filter(testnumb_id=test_id).order_by('id')
+            test_ = Question.objects.filter(testnumb_id=test_id)
         except Test.DoesNotExist:
             raise Http404("Не найден тест")
 
         # test_ = get_object_or_404(Question, pk=test_id)
-        print('test_', test_)
+        # print('test_', test_[0].id)
+        # for i in test_:
+        #     y = test_[i].id
+        #     print('test_тайп', i)
+        #     tj = [].append(y)
         tes = test_.first()
-        print('test_тайп', type(test_))
-        print('tes_тайп', type(tes))
-        # open_q = Question.choice_set.get(pk=request.POST['test_id'])
-        # print(open_q)
+
         return render(request, 'polls/detail.html', {'test': tes})
 
 
@@ -41,26 +42,6 @@ def results(request, test_id, question_id):
 
 def vote(request, test_id, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    print('requset', request, 'quw',question_id, 'testid',test_id)
-    print(question)
-    print('_____________________________________________________________________________')
-
-
-    try:
-        res_quest = ResultTest.objects.get(user_id=request.user.id, question_id=question_id)
-        res_quest.save()
-        print(res_quest, 'res_quest')
-    except ResultTest.DoesNotExist:
-        res_quest = ResultTest.objects.create(
-            user_id=request.user.id,
-            question_id=question_id,
-            balls=0)
-
-        res_quest.save()
-
-        print(res_quest, 'res_quest')
-    print(res_quest, 'res_quest')
-
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
         print(selected_choice)
@@ -71,13 +52,23 @@ def vote(request, test_id, question_id):
             'test': question,
             'error_message': "Вы не сделали выбор",
         })
-    else:
+    try:
+        res_quest = ResultTest.objects.get(user_id=request.user.id, question_id=question_id)
+        res_quest.save()
+        print(res_quest, 'res_quest')
 
-        resultpoll = ResultTest.objects.get(question_id=question_id)
-        print(resultpoll)
-        print(resultpoll.balls)
-        resultpoll.balls += selected_choice.votes
-        resultpoll.save()
+    except ResultTest.DoesNotExist:
+        res_quest = ResultTest.objects.create(
+            user_id=request.user.id,
+            question_id=question_id,
+            balls=0)
+        if selected_choice.answer is True:
+            res_quest.balls += 1
+            res_quest.save()
+    selected_choice.votes += 1
+    selected_choice.save()
+
+    print(selected_choice.answer, 'answeeeeeeeeeeeeeeeeeeeeeeeer')
 
     return HttpResponseRedirect(reverse('polls:results', args=(test_id, question_id,)))
 
