@@ -1,0 +1,19 @@
+{% extends 'polls/index.html' %}
+{% block content %}
+
+<div class="fs-1 fst-italic fw-bold">Ваши результаты</div>
+<div>
+    <ul class="my-3 list-group list-group-numbered">
+        {% for i in q %}
+            <li class="list-group-item">
+                Вопрос{% if i.balls == 1 %} -- Правильный ответ{% else %} -- Неправильный ответ{% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<div>
+    <div class="fs-2 fst-italic fw-bold">Итог:</div>
+    <div>Правильно {{ sumtrue  }} из {{ sum }} </div>
+    <div>Процент правильных ответов: {{ persent|floatformat }}% </div>
+</div>
+{% endblock %}

@@ -23,14 +23,23 @@ def open_test(request, test_id):
 
 
 def next_question(request, test_id, queue):
-    print(request,test_id,queue)
-    print('_______)________________)_____________________)))))))))))))))))))))))))))))))))')
+
     try:
         question = Question.objects.get(testnumb=test_id, queue=queue)
 
     except Question.DoesNotExist:
-        raise Http404("Не найден вопрос")
-        # return render(request, 'polls/result_test.html')
+        # raise Http404("Не найден вопрос")
+        q = ResultTest.objects.filter(test_done_id=test_id, user_id=request.user.id).all()
+        sum_true =q.filter(balls=1).count()
+        sum = q.count()
+        persent = sum_true/sum*100
+        context = {'q': q,
+                   'sumtrue': sum_true,
+                   'sum': sum,
+                   'persent':persent
+                   }
+
+        return render(request, 'polls/resulttest.html', context)
     print(question)
     return render(request, 'polls/detail.html', {'question': question},)
 
@@ -49,13 +58,11 @@ def vote(request, test_id, queue):
         })
     try:
         res_quest = ResultTest.objects.get(user_id=request.user.id, question_id=question.id)
-
-        print(res_quest, 'res_quest')
-
     except ResultTest.DoesNotExist:
         res_quest = ResultTest.objects.create(
             user_id=request.user.id,
             question_id=question.id,
+            test_done_id=test_id,
             balls=0)
         if selected_choice.answer is True:
             res_quest.balls += 1
@@ -63,8 +70,11 @@ def vote(request, test_id, queue):
     selected_choice.votes += 1
     selected_choice.save()
 
-    print(selected_choice.answer, 'answeeeeeeeeeeeeeeeeeeeeeeeer')
-
     return render(request, 'polls/results.html', {'question': question})
 
 
+def result_test(request, user_id, test_id):
+    q = ResultTest.objects.filter(test_done_id=test_id).all()
+    context = {'q': q,}
+    sum_balls = ResultTest.objects.select_related('question__testnumb').all()
+    return render(request, 'polls/resulttest.html', context)

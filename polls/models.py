@@ -37,14 +37,5 @@ class ResultTest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     balls = models.IntegerField(default=0)
-    test_done = models.BooleanField(default=False)
+    test_done = models.ForeignKey(Test, on_delete=models.CASCADE)
 
-
-# class Profile(models.Model):
-#     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-#     bio = models.TextField(null=True, blank=True)
-#     profile_pic = models.ImageField(null=True, blank=True, upload_to="profile/images/")
-#     instagram = models.CharField(max_length=50, null=True, blank=True)
-#
-#     def __str__(self):
-#         return str(self.user)
