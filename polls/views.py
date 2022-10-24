@@ -1,5 +1,5 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotFound
+from django.shortcuts import render, get_object_or_404
+from django.http import Http404
 from .models import Question, Choice, ResultTest, Test
 from django.views.generic import ListView
 
@@ -28,7 +28,6 @@ def next_question(request, test_id, queue):
         question = Question.objects.get(testnumb=test_id, queue=queue)
 
     except Question.DoesNotExist:
-        # raise Http404("Не найден вопрос")
         q = ResultTest.objects.filter(test_done_id=test_id, user_id=request.user.id).all()
         sum_true =q.filter(balls=1).count()
         sum = q.count()
@@ -36,11 +35,10 @@ def next_question(request, test_id, queue):
         context = {'q': q,
                    'sumtrue': sum_true,
                    'sum': sum,
-                   'persent':persent
+                   'persent': persent
                    }
 
         return render(request, 'polls/resulttest.html', context)
-    print(question)
     return render(request, 'polls/detail.html', {'question': question},)
 
 
@@ -48,7 +46,6 @@ def vote(request, test_id, queue):
     question = get_object_or_404(Question, queue=queue, testnumb_id=test_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
-        print(selected_choice)
 
     except (KeyError, Choice.DoesNotExist):
 
@@ -71,10 +68,3 @@ def vote(request, test_id, queue):
     selected_choice.save()
 
     return render(request, 'polls/results.html', {'question': question})
-
-
-def result_test(request, user_id, test_id):
-    q = ResultTest.objects.filter(test_done_id=test_id).all()
-    context = {'q': q,}
-    sum_balls = ResultTest.objects.select_related('question__testnumb').all()
-    return render(request, 'polls/resulttest.html', context)

@@ -9,5 +9,4 @@ urlpatterns = [
     path('<int:test_id>/<int:queue>', views.next_question, name='detail'),
     path('<int:test_id>/<int:queue>/results/', views.next_question, name='results'),
     path('<int:test_id>/<int:queue>/vote/', views.vote, name='vote'),
-    path('<int:test_id>/<int:user_id>/resulttest', views.result_test, name='result'),
 ]

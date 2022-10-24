@@ -1,7 +1,7 @@
 {% extends 'polls/index.html' %}
 {% block content %}
 
-<div class="fs-1 fst-italic fw-bold">Ваши результаты</div>
+<div class="fs-1 fst-italic fw-bold">Ваши результаты теста, {{ user.username }}</div>
 <div>
     <ul class="my-3 list-group list-group-numbered">
         {% for i in q %}
