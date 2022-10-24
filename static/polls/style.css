@@ -3,7 +3,8 @@
     min-height: 125px;
 }
 
-.logo-link {
+.logo-link,
+.list-group-item a {
     text-decoration: none;
 }
 

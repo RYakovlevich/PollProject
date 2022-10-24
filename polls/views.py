@@ -1,13 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotFound
 from .models import Question, Choice, ResultTest, Test
-from django.urls import reverse, reverse_lazy
-from django.contrib.auth.models import User
 from django.views.generic import ListView
-from django.template import loader
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic.detail import DetailView
-from polls import models
 
 
 class HomeView(ListView):
@@ -19,29 +13,30 @@ class HomeView(ListView):
 
 
 def open_test(request, test_id):
-        try:
-            test_ = Question.objects.filter(testnumb_id=test_id)
-        except Test.DoesNotExist:
-            raise Http404("Не найден тест")
 
-        # test_ = get_object_or_404(Question, pk=test_id)
-        # print('test_', test_[0].id)
-        # for i in test_:
-        #     y = test_[i].id
-        #     print('test_тайп', i)
-        #     tj = [].append(y)
-        tes = test_.first()
+    try:
+        question = Question.objects.filter(testnumb=test_id).order_by('queue').first()
+    except Test.DoesNotExist:
+        raise Http404("Не найден тест")
 
-        return render(request, 'polls/detail.html', {'test': tes})
+    return render(request, 'polls/detail.html', {'question': question},)
 
 
-def results(request, test_id, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/results.html', {'test': question})
+def next_question(request, test_id, queue):
+    print(request,test_id,queue)
+    print('_______)________________)_____________________)))))))))))))))))))))))))))))))))')
+    try:
+        question = Question.objects.get(testnumb=test_id, queue=queue)
+
+    except Question.DoesNotExist:
+        raise Http404("Не найден вопрос")
+        # return render(request, 'polls/result_test.html')
+    print(question)
+    return render(request, 'polls/detail.html', {'question': question},)
 
 
-def vote(request, test_id, question_id):
-    question = get_object_or_404(Question, pk=question_id)
+def vote(request, test_id, queue):
+    question = get_object_or_404(Question, queue=queue, testnumb_id=test_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
         print(selected_choice)
@@ -49,18 +44,18 @@ def vote(request, test_id, question_id):
     except (KeyError, Choice.DoesNotExist):
 
         return render(request, 'polls/detail.html', {
-            'test': question,
+            'question': question,
             'error_message': "Вы не сделали выбор",
         })
     try:
-        res_quest = ResultTest.objects.get(user_id=request.user.id, question_id=question_id)
-        res_quest.save()
+        res_quest = ResultTest.objects.get(user_id=request.user.id, question_id=question.id)
+
         print(res_quest, 'res_quest')
 
     except ResultTest.DoesNotExist:
         res_quest = ResultTest.objects.create(
             user_id=request.user.id,
-            question_id=question_id,
+            question_id=question.id,
             balls=0)
         if selected_choice.answer is True:
             res_quest.balls += 1
@@ -70,16 +65,6 @@ def vote(request, test_id, question_id):
 
     print(selected_choice.answer, 'answeeeeeeeeeeeeeeeeeeeeeeeer')
 
-    return HttpResponseRedirect(reverse('polls:results', args=(test_id, question_id,)))
-
-
-# def profile(request, user_id):
-#     try:
-#         user_profile = models.Profile.objects.get(user_id=user_id)
-#         posts = models.Post.objects.filter(user_id=user_id)
-#         return render(request, 'registration/profile.html', {'user': user_profile, 'posts': posts})
-#     except (User.DoesNotExist, models.Profile.DoesNotExist):
-#         return redirect('home')
-
+    return render(request, 'polls/results.html', {'question': question})
 
 

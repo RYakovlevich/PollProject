@@ -1,15 +1,22 @@
 {% extends 'polls/index.html' %}
 {% block content %}
-<form action="{% url 'polls:vote' test.testnumb_id test.id %}" method="post">
-{% csrf_token %}
-<fieldset>
-    <legend><h1>{{ test.question_text }}</h1></legend>
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-    {% for choice in test.choice_set.all %}
-        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
-    {% endfor %}
-</fieldset>
-<input type="submit" value="Выбрать">
+<form action="{% url 'polls:vote' question.testnumb_id question.queue %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend><div class="fs-1 fst-italic fw-bold">{{ question.question_text }}</div></legend>
+        {% if error_message %}
+            <p class="fw-bold text-danger">{{ error_message }}</p>
+        {% endif %}
+        {% for choice in question.choice_set.all %}
+            <div  class="form-check">
+                <input class="form-check-input" type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
+
+            </div>
+        {% endfor %}
+    </fieldset>
+    <div class="mt-3">
+        <input class="btn btn-success" type="submit" value="Выбрать">
+    </div>
 </form>
 {% endblock %}

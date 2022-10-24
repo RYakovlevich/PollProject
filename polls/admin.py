@@ -6,6 +6,7 @@ from .models import Choice, Question, Test
 class ChoiceInline(admin.StackedInline):
     model = Choice
     extra = 3
+    exclude = ('votes',)
 
 
 class QuestionInline(admin.StackedInline):
@@ -26,10 +27,11 @@ class TestAdmin(admin.ModelAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('question_text', 'link', 'testnumb')
+    list_display = ('question_text', 'link', 'testnumb', 'queue')
     fieldsets = [
         (None,               {'fields': ['question_text']}),
-        ('К какому тесту относится', {'fields': ['testnumb']})
+        ('К какому тесту относится', {'fields': ['testnumb']}),
+        ('Очередь в тесте ', {'fields': ['queue']})
     ]
     inlines = [ChoiceInline]
 

@@ -46,8 +46,9 @@
                                     Tests
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
-                                    <li><a class="dropdown-item" href="#">First test</a></li>
-                                    <li><a class="dropdown-item" href="#">Second test</a></li>
+                                    {% for question in latest_question_list %}
+                                        <li><a href="{% url 'polls:first' question.id  %}" class="dropdown-item">{{ question.testtype }}</a></li>
+                                    {% endfor %}
                                 </ul>
                             </li>
                         </ul>
@@ -59,13 +60,16 @@
             {% block content %}
                 {% if user.is_authenticated %}
                     {% if latest_question_list %}
-                        <ul>
-                            {% for test in latest_question_list %}
-                                <li><a href="{% url 'polls:detail' test.id %}">{{ test.testtype }}</a></li>
+                        <div class="fs-1 fst-italic fw-bold">
+                            Доступные тесты
+                        </div>
+                        <ul class="py-3 list-group list-group-numbered">
+                            {% for question in latest_question_list %}
+                                <li class="list-group-item"><a href="{% url 'polls:first' question.id %}">{{ question.testtype }}</a></li>
                             {% endfor %}
                         </ul>
                     {% else %}
-                        <p>No polls are available.</p>
+                        <div class="fs-3 fst-italic pt-3">No polls are available.</div>
                     {% endif %}
                 {% else %}
                     <div class="mx-5">
