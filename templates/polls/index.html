@@ -41,6 +41,7 @@
                             Home
                         </a>
                         <ul class="navbar-nav">
+                            {% if user.is_authenticated %}
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Tests
@@ -51,6 +52,7 @@
                                     {% endfor %}
                                 </ul>
                             </li>
+                        {% endif %}
                         </ul>
                     </div>
               </div>
